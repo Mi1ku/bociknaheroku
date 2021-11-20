@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 module.exports = {
   name: 'Multiple Bot Owners',
   version: '1.0.0',
@@ -8,11 +9,11 @@ module.exports = {
   fields: [],
   defaultFields: {},
 
-  size() {
-    return { height: 500, width: 500 };
+  size () {
+    return { height: 500, width: 500 }
   },
 
-  html() {
+  html (data) {
     return `
 <style>
   html, body {
@@ -63,129 +64,127 @@ module.exports = {
       </a>
     </div>
   </div>
-</div>`;
+</div>`
   },
 
-  init(document) {
+  init (document) {
     try {
-      const fs = require('fs');
-      const path = require('path');
+      const fs = require('fs')
+      const path = require('path')
 
-      const filepath = path.join(__dirname, '../data', 'multiple_bot_owners.json');
+      const filepath = path.join(__dirname, '../data', 'multiple_bot_owners.json')
 
-      let botOwners = [];
+      let botOwners = []
 
-      function addOwnerHTML(owner) {
-        document.getElementById('current-owners').innerHTML += `
-                <div class="field has-addons" id="${owner}_DIV"> <input id="${owner}_INPUT" class="input" type="text" placeholder="User ID" disabled
-                value="${owner}">
-                <div class="control"> <a class="button is-info" onclick="document.delOwner(document.getElementById('${owner}_INPUT'))"> <i class="fas fa-minus"></i> </a> </div>
-                </div>
-              `;
-      }
-
-      function loadOwners() {
+      // eslint-disable-next-line no-inner-declarations
+      function loadOwners () {
         if (!fs.existsSync(filepath)) {
-          fs.writeFileSync(filepath, JSON.stringify(botOwners));
+          fs.writeFileSync(filepath, JSON.stringify(botOwners))
         } else {
-          botOwners = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+          botOwners = JSON.parse(fs.readFileSync(filepath, 'utf8'))
         }
 
-        botOwners.forEach((owner) => {
+        botOwners.forEach(owner => {
           if (owner && /^\d+$/.test(owner)) {
-            addOwnerHTML(owner);
+            addOwnerHTML(owner)
           }
-        });
+        })
       }
 
-      document.delOwner = function delOwner(element) {
-        const owner = element && element.value;
-        const element2 = document.getElementById(`${owner}_DIV`);
-        alert(`${owner} was removed.`);
-        if (!owner) return;
+      // eslint-disable-next-line no-inner-declarations
+      function addOwnerHTML (owner) {
+        document.getElementById('current-owners').innerHTML += `
+          <div class="field has-addons" id="${owner}_DIV"> <input id="${owner}_INPUT" class="input" type="text" placeholder="User ID" disabled
+          value="${owner}">
+          <div class="control"> <a class="button is-info" onclick="document.delOwner(document.getElementById('${owner}_INPUT'))"> <i class="fas fa-minus"></i> </a> </div>
+          </div>
+        `
+      }
 
-        botOwners.splice(botOwners.indexOf(owner), 1);
+      document.delOwner = function (element) {
+        const owner = element && element.value
+        const element2 = document.getElementById(`${owner}_DIV`)
+        alert(`${owner} was removed.`)
+        if (!owner) return
 
-        element.parentNode.removeChild(element);
-        element2.parentNode.removeChild(element2);
+        botOwners.splice(botOwners.indexOf(owner), 1)
 
-        fs.writeFileSync(filepath, JSON.stringify(botOwners, null, 2));
-      };
+        element.parentNode.removeChild(element)
+        element2.parentNode.removeChild(element2)
 
-      document.addOwner = function addOwner(owner = false) {
-        if (!owner) owner = document.getElementById('ownerinput').value;
+        fs.writeFileSync(filepath, JSON.stringify(botOwners, null, 2))
+      }
+
+      document.addOwner = function (owner = false) {
+        if (!owner) owner = document.getElementById('ownerinput').value
 
         if (!owner) {
-          return alert('MultipleBotOwners\nYou must enter a value!');
-        }
-        if (!/^\d+$/.test(owner)) {
-          return alert(`MultipleBotOwners\nThe inputted value can only be a discord ID.\nYou put ${owner}.`);
-        }
-        if (botOwners.includes(owner)) {
-          return alert('MultipleBotOwners\nThat ID already exists!.');
+          return alert('MultipleBotOwners\nYou must enter a value!')
+        } else if (!/^\d+$/.test(owner)) {
+          return alert(`MultipleBotOwners\nThe inputted value can only be a discord ID.\nYou put ${owner}.`)
+        } else if (botOwners.includes(owner)) {
+          return alert('MultipleBotOwners\nThat ID already exists!.')
         }
 
-        addOwnerHTML(owner);
-        botOwners.push(owner);
-        fs.writeFileSync(filepath, JSON.stringify(botOwners));
+        addOwnerHTML(owner)
+        botOwners.push(owner)
+        fs.writeFileSync(filepath, JSON.stringify(botOwners))
 
-        return 'ADDED';
-      };
-      loadOwners();
+        return 'ADDED'
+      }
+      loadOwners()
     } catch (error) {
-      alert(`MultipleBotOwners Error: \n${error}`);
+      alert('MultipleBotOwners Error: \n' + error)
     }
   },
 
-  close() {},
+  close () {},
 
-  mod(DBM) {
-    const { Actions, Files } = DBM;
+  mod (DBM) {
+    const { Actions, Files } = DBM
 
-    const fs = require('fs');
-    const path = require('path');
+    const fs = require('fs')
+    const path = require('path')
 
     try {
-      const filepath = path.join(__dirname, '../data', 'multiple_bot_owners.json');
+      const filepath = path.join(__dirname, '../data', 'multiple_bot_owners.json')
 
-      let botOwners = [];
+      let botOwners = []
 
       if (!fs.existsSync(filepath)) {
-        fs.writeFileSync(filepath, JSON.stringify(botOwners));
+        fs.writeFileSync(filepath, JSON.stringify(botOwners))
       } else {
-        botOwners = JSON.parse(fs.readFileSync(filepath, 'utf8'));
+        botOwners = JSON.parse(fs.readFileSync(filepath, 'utf8'))
       }
 
-      Actions.checkConditions = function checkConditions(msg, cmd) {
-        const isServer = Boolean(msg.guild && msg.member);
-        const restriction = parseInt(cmd.restriction, 10);
-        const { permissions } = cmd;
+      Actions.checkConditions = function (msg, cmd) {
+        const isServer = Boolean(msg.guild && msg.member)
+        const restriction = parseInt(cmd.restriction)
+        const permissions = cmd.permissions
         switch (restriction) {
           case 0:
             if (isServer) {
-              return this.checkPermissions(msg, permissions);
+              return this.checkPermissions(msg, permissions)
+            } else {
+              return true
             }
-            return true;
-
           case 1:
-            return isServer && this.checkPermissions(msg, permissions);
+            return isServer && this.checkPermissions(msg, permissions)
           case 2:
-            return isServer && msg.guild.owner === msg.member;
+            return isServer && msg.guild.owner === msg.member
           case 3:
-            return !isServer;
+            return !isServer
           case 4:
-            return (
-              (botOwners.length > 0 && botOwners.includes(msg.author.id)) ||
+            return (botOwners.length > 0 && botOwners.includes(msg.author.id)) ||
               (Files.data.settings.ownerId && msg.author.id === Files.data.settings.ownerId)
-            );
           default:
-            return true;
+            return true
         }
-      };
+      }
     } catch (error) {
-      console.error(`MultipleBotOwners_ERROR:\n${error}`);
+      console.error('MultipleBotOwners_ERROR:\n' + error)
     }
 
-    console.log('Multiple Bot Owners Extension Loaded!');
-  },
-};
+    console.log('Multiple Bot Owners Extension Loaded!')
+  }
+}
