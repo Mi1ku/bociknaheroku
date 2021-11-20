@@ -5,6 +5,8 @@
   "version": "1.6.10",
   "dependencies": {
     "avconv": "^3.1.0",
+    "cjs": "0.0.11",
+    "d.js": "^0.7.5",
     "discord.js": "^12.5.3",
     "fstorm": "latest",
     "jimp": "^0.16.1",
