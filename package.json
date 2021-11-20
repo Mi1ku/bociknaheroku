@@ -10,6 +10,7 @@
     "jimp": "latest",
     "node-cron": "^3.0.0",
     "simple-youtube-api": "^5.2.1",
+    "valid-url": "file:node_modules/valid-url",
     "youtube-info": "^1.3.2",
     "ytdl-core": "^4.9.1"
   }
